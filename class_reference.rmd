@@ -1,5 +1,5 @@
 ---
-title: "Class Reference"
+title: "Data Journalism"
 author: "Eve Sampson"
 output:
   pdf_document:
@@ -20,3 +20,73 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Introduction
 
 Consider this my personal guide to the commands and functions you will learn. In general, when you come across an R command or function that you want to remember, put it in here along with a description of what it does and when you'd use it.
+
+Jan 27
+to set a working directory - click on "more" under the file explorer on the right and click "set as working directory. Here is the command:
+setwd("")
+
+to install packages: install.packages("")
+
+in every single notebook we use, you have to do this: library("tidyverse")
+
+head() gives you the first 6 rows of a file
+glimpse() gives you a literal glimpse of the data - what types, etc.
+group_by() and you input the name of the column you want to sort - example below:
+  
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n()
+  )
+```
+
+See where the most loans are by county (count the number of loans in that group, and then sort so the county with the highest number of loans is listed first.)
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n()
+  ) %>%
+  arrange(desc(count_loans))
+```
+
+county and race, then count the number of loans in that group, and then sort from A-Z by county and then by race.
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name,race) %>%
+  summarise(
+    count_loans = n()
+  ) %>%
+  arrange(project_county_name,race)
+```
+
+
+by the county for each loan, and then count the number of loans in that group and add up the value of all loans in that group. Then sort so the county with the highest total loan dollar amount is listed first.
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n(),
+    total_loans_amount = sum(amount)
+  ) %>%
+  arrange(desc(total_loans_amount))
+```
+
+count the number of loans , add up the value of all loans, and calculate the mean and median loan amounts. Then sort so the county with the highest mean dollar amount is listed first.
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n(),
+    total_loans_amount = sum(amount),
+    mean_loan_amount = mean(amount),
+    median_loan_amount = median(amount)
+  ) %>%
+  arrange(desc(mean_loan_amount))
+```
+
+to run code:
+```{r}
+library("tidyverse")
+```
