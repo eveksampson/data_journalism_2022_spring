@@ -1,14 +1,16 @@
 ---
 title: "Class Reference"
-author: "Student name"
+author: "Eve Sampson"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     theme: cerulean
     highlight: pygments
-    toc: true
+    toc: yes
     toc_float:
-      collapsed: true
-      smooth_scroll: false
+      collapsed: yes
+      smooth_scroll: no
 ---
 
 ```{r setup, include=FALSE}
