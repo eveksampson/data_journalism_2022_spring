@@ -1,7 +1,7 @@
 ---
 title: "lab_01"
-author: "sean mussenden"
-date: "8/19/2021"
+author: "Eve Sampson"
+date: "Jan 29, 2022"
 output: html_document
 ---
 
@@ -47,7 +47,7 @@ wv_ppp_loans <- read_rds("lab_01.rds")
 
 **Task** Run the codeblock below to use glimpse to get a sense of the column names, types and sample data.
 **Q1** How many rows and columns does this dataframe have?
-**A1** [write your answer here]
+**A1** This dataframe has 33,336 rows and 58 columns.
 
 ```{r}
 glimpse(wv_ppp_loans)
@@ -58,11 +58,14 @@ glimpse(wv_ppp_loans)
 Use the pre-lab and your reference notebook as examples.
 
 **Q2** Which West Virginia county got the most loans? How many?
-**A2** [write your answer here]
+**A2** Cabell County got the most loans with 1965 loans.
 
 ```{r}
-# Write the code to produce your answer here
-
+wv_ppp_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n()
+  )
 ```
 **Q3** Which West Virginia county got the fewest loans? How many?
 **A3** [write your answer here]
