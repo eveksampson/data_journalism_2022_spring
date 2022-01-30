@@ -58,24 +58,29 @@ glimpse(wv_ppp_loans)
 Use the pre-lab and your reference notebook as examples.
 
 **Q2** Which West Virginia county got the most loans? How many?
-**A2** Cabell County got the most loans with 1965 loans.
+**A2** Kanawha County had 4273 loans, making them the county with the most loans. 
 
 ```{r}
 wv_ppp_loans %>%
   group_by(project_county_name) %>%
   summarise(
     count_loans = n()
-  )
+  ) %>%
+  arrange(desc(count_loans))
 ```
 **Q3** Which West Virginia county got the fewest loans? How many?
-**A3** [write your answer here]
+**A3** Palm Beach County had the fewest loans with 2 loans. 
 
 ```{r}
-# Write the code to produce your answer here
-
+wv_ppp_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n()
+  ) %>%
+  arrange(desc(count_loans))
 ```
 **Q4** What's your best educated guess to explain why the county identified in question 2 had a lot of loans and why the county identified in question 3 had only a few loans? Hint: you won't find the answer in the data, you'll need to do some quick web research. You do not need to write any code for this question, so no codeblock is provided.  
-**A4** [write your answer here]
+**A4** Kanawha County appears to be West Virginia's most populated county so it makes sense that it had the most loans because. Palm Beach County is not a county in West Virginia, indicating those loans may be fraudulent.
 
 
 **Q5** What West Virginia business got the state's largest PPP loan? How much was it for? What does the business do? How many jobs did the loan retain, according to the data?
