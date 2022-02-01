@@ -90,3 +90,32 @@ to run code:
 ```{r}
 library("tidyverse")
 ```
+
+arrange(max_loan) = ascending order
+arrange(desc(max_loan)) = descending order
+
+Reads in a spreadsheet and converts to a dataframe
+```{r}
+maryland_ppp <- read_csv('data/ppp_applications_md.csv.zip')
+```
+
+
+To create a new column
+```{r}
+maryland_ppp %>%
+  select(loan_number, amount, payroll_proceed) %>%
+  mutate(
+  percent_payroll = payroll_proceed/amount
+)
+```
+See below explanation
+```{r}
+maryland_ppp %>%
+  select(loan_number, amount, payroll_proceed) %>%
+  # mutate(
+  #new column = value
+#)
+
+```
+
+select(info) - this means show me only this
