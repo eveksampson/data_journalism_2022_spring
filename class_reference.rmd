@@ -119,3 +119,7 @@ maryland_ppp %>%
 ```
 
 select(info) - this means show me only this
+
+to get a count of in/out of state
+maryland_with_in_out %>% group_by(in_out) %>% summarize(count =(
+))
