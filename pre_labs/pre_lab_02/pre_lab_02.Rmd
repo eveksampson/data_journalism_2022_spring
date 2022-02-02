@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_02.Rmd"
 author: "Eve Sampson"
-date: "8/24/2021"
+date: "2/1/2021"
 output: html_document
 ---
 
@@ -197,7 +197,7 @@ glimpse(lubridate_maryland_ppp)
 ```
 What is the datatype for `date_approved` (it's just to the right of the column name)? What is the datatype for `CleanDate`?
 Put your answers in the space below.
-**Answer**
+**Answer** date_approved is <chr> and CleanDate is <dttm>
 
 
 ### Task 15: Load data using read_csv
@@ -208,7 +208,7 @@ maryland_ppp_sample <- read_csv('data/ppp_maryland.csv')
 glimpse(maryland_ppp_sample)
 ```
 What is the datatype for `date_approved` (it's just to the right of the column name)? Put your answer in the space below.
-**Answer**
+**Answer** <date>
 
 ### Task 16: Use mutate and lubridate to add a column called `Month` and see which month had the most applications.
 **Task** Run the following code to create a new column based on `date_approved`. Add a description of what this code does to your reference notebook.
@@ -221,4 +221,4 @@ maryland_ppp %>%
   arrange(desc(total))
 ```
 What month saw the most applications and how many? Put your answer in the space below.
-**Answer**
+**Answer** April 2020
