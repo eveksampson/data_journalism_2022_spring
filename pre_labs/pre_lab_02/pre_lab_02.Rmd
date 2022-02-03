@@ -137,6 +137,8 @@ There's a lot going on here, so let's unpack it. It starts out as a typical muta
 Filter is a tidyverse verb that uses criteria you supply to return a subset of the original data. Here's how it is structured:
 
 `filter(COLUMN_NAME OPERATOR CRITERIA)`
+filter(amount == 10000)
+filter(amount >= 10000)
 
 Where COLUMN_NAME is any column name from your dataframe, OPERATOR is some comparison operator like == or > or < and CRITERIA is something to compare the values in COLUMN_NAME to.
 
@@ -191,7 +193,7 @@ What is the datatype for `date_approved` (it's just to the right of the column n
 
 ```{r}
 lubridate_maryland_ppp <- maryland_ppp_sample %>% mutate(
-    CleanDate = ymd_hms(date_approved)
+    CleanDate = ymd(date_approved)
 )
 glimpse(lubridate_maryland_ppp)
 ```
