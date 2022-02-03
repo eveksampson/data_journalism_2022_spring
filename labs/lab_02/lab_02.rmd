@@ -48,7 +48,7 @@ west_virginia_ppp <- read_rds("data/lab_02.rds")
 
 **Q1** Create a new column that divides the loan amounts into the following options - under_10k, 10k_50k, 50k_100k, 100k_500k, 500k_1m, 1m_plus - and calculates how many loans are in each group. How would you describe the distribution of loans in a sentence?
 Hint: You will need to use `case_when` to make this work.
-**A1** 
+**A1** In West Virginia, there were 9,227 loans under $10,000, 15,089 loans between $10,000 and $50,000, 3,976 loans between $50,000 and $100,000, 4,150 loans between $100,000 and $500,000, 538 loans between $500,000 and one million dollars and only 356 loans above one million dollars. The vast majority of loans were between $10,000 and $50,000. 
 
 
 
@@ -69,22 +69,25 @@ mutate(
 ```
 
 **Q2** Some of the loans appear not to have been paid out - there is a column representing the amount of money that hasn't been disbursed to the applicant. Which servicing lenders have the most loans with undisbursed amounts greater than 0?
-**A2** [write your answer here]
+**A2** Two lenders have undispersed amounts greater than 0: Davis Trust Company has 12 undispersed loans and Miners & Merchants Bank has one.
 
 ```{r}
 lenders_with_undispersed_loans <- west_virginia_ppp %>% filter(undisbursed_amount > 0)
 ```
 
 **Q3** What are some potential reasons why a loan might not be paid out? What questions does that circumstance raise for you?
-**A3** [write your answer here]
+**A3** According to the Organization for Economic Co-operation and Development, the term "undispersed," means "funds committed by the creditor but not yet utilized by the borrower." Based on this definition, the companies may not have requested the funds allocated due to not needing them. Perhaps they did suffer pandemic consequences as planned. This makes me wonder what will become of the money allocated. Is another small business allowed to request that money? Where does it go if unused? ( https://stats.oecd.org/glossary/detail.asp?ID=6029)
 
 
 **Q4** Which month in 2021 had the most loans approved?
-**A4** [write your answer here]
+**A4** April 2020 had the most loans approved. 
 
 ```{r}
-# Write the code to produce your answer here
-
+west_virginia_ppp %>%
+  mutate(Month = floor_date(date_approved, "month")) %>%
+  group_by(Month) %>%
+  summarise(total = n()) %>%
+  arrange(desc(total))
 ```
 
 **Q5** How many loans went to West Virginia applicants that listed the maximum number of jobs retained (500)? Which one had the earliest approved date?
