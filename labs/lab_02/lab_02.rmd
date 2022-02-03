@@ -91,9 +91,8 @@ west_virginia_ppp %>%
 ```
 
 **Q5** How many loans went to West Virginia applicants that listed the maximum number of jobs retained (500)? Which one had the earliest approved date?
-**A5** [write your answer here]
+**A5** 10 applicants listed 500 jobs retained. J. Austin Heating & Cooling Inc. had earliest approval date, which was April 8, 2020. 
 
 ```{r}
-# Write the code to produce your answer here
-
+applicant_max_jobs_retained <- west_virginia_ppp %>% filter(jobs_retained == 500)
 ```
