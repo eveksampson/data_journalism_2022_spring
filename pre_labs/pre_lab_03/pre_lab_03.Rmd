@@ -105,7 +105,7 @@ ppp_maryland_loans %>%
 
 ### Task 9: Examine the forgiveness_date column for missing values.
 **Task** Run the following codeblock to group by forgiveness_date, count the number of loans, then sort from highest to lowest on count and filter to only show NA values. How many loans are there where forgiveness_date is NA? Is it the same as the number for forgiveness_amount? Answer below.
-**Answer**:
+**Answer**: 135,073; yes, the numbers are the same. 
 
 ```{r}
 ppp_maryland_loans %>%
@@ -119,7 +119,7 @@ ppp_maryland_loans %>%
 
 ### Task 10: Examine forgiveness_date and forgiveness_amount together
 **Task** Run the following codeblock to group by forgiveness_date and forgiveness_amount, count the number of loans, then sort from highest to lowest on count and filter to only show NA values. How many loans are there where forgiveness_date and forgiveness_amount is NA? Is it the same as the number for forgiveness_amount and forgiveness_amount run separately in the codeblocks above? What can you conclude from Answer below.
-**Answer**:
+**Answer**:135,073; they are the same records. 
 
 ```{r}
 ppp_maryland_loans %>%
@@ -146,7 +146,7 @@ library(lubridate)
 
 ### Task 13: Look for date gaps in data
 **Task** Run the following codeblock to create a new column called "month_year_approved" that extracts the month and year from the "date_approved" column.  Group by the new "month_year_approved" column, count, and sort by "month_year_approved". How many loans are there in the data for October 2020? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** There are no loans listed within the data for October 2020. My description would be that it makes the "floor" date the first of the month so that it can count the number of loans within the month. It then sorts and summarizes by month.
 ```{r}
 ppp_maryland_loans %>%
   mutate(month_year_approved = floor_date(date_approved, "month")) %>%
