@@ -79,7 +79,7 @@ glimpse(ppp_maryland_loans)
 
 ### Task 7: Examine the franchise column for missing values.
 **Task** Run the following codeblock to group by franchise_name, count the number of loans, then sort from highest to lowest on count. How many loans are there where franchise_name is NA? How many loans are there where the franchise_name is "Subway"? Answer below.
-**Answer**:
+**Answer**: 192,959 where the franchise is "NA", 275 where the name is "Subway"
 
 ```{r}
 
@@ -92,7 +92,7 @@ ppp_maryland_loans %>%
 ```
 ### Task 8: Examine the forgiveness_amount column for missing values.
 **Task** Run the following codeblock to group by forgiveness_amount, count the number of loans, then sort from highest to lowest on count. How many loans are there where forgiveness_amount is NA? Answer below.
-**Answer**:
+**Answer**: 135,073
 
 ```{r}
 ppp_maryland_loans %>%
