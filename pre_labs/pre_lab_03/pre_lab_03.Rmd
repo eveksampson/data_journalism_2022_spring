@@ -45,7 +45,7 @@ ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=10)
 
 ### Task 3: Check for problems on load
 **Task** Check for problems that occurred when loading the ppp loan data for Maryland by running the following code.  How many problems were there, as shown by the number of rows in the output table showing errors? Answer below.
-**Answer**
+**Answer** "One or more parsing issues, see 'problems()' for details"
 
 ```{r}
 
@@ -55,7 +55,7 @@ problems(ppp_maryland_loans)
 
 ### Task 4: Reload data
 **Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below
-**Answer**
+**Answer** It does not show any errors.
 
 ```{r}
 ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=195865)
@@ -63,7 +63,7 @@ ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=195865)
 
 ### Task 5: Examine the data with glimpse
 **Task** Run the following codeblock to glimpse the data.  What data type is the "amount" field?  What data type is the "name" field? What data type is the id column? Answer below.
-**Answer**
+**Answer** The "amount" is "dbl" the "name" field is "chr" and the id column is "dbl"
 ```{r}
 glimpse(ppp_maryland_loans)
 ```
@@ -71,7 +71,7 @@ glimpse(ppp_maryland_loans)
 **Task** Run the following codeblock to change the data type of the "id" field from a number (dbl) to a character, and then glimpse the data, to see the change. Add a description of what this code does to your reference notebook.     
 
 ```{r}
-ppp_maryland_loans <- ppp_maryland_loans %>%
+ppp_maryland_loans <- ppp_maryland_loans %>% #save the thing to itself so it replaces it in its entirety 
   mutate(id = as.character(id))
 
 glimpse(ppp_maryland_loans)
