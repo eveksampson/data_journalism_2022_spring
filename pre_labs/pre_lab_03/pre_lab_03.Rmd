@@ -231,7 +231,7 @@ arnold_md_loans
 
 ### Task 6: Use clean_names()
 **Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the name of the column "1_id"? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** It fixes street address so now it is "street_address" and 
 
 
 ```{r}
