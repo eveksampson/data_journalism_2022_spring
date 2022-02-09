@@ -157,3 +157,47 @@ how to filter NAs
 maryland_ppp %>% filter(is.na(project_county_name))
 
 read.csv versus read_csv read.csv doesn't presume too much - is more conservative in its estimates (something looks like a date but not sure so call it a character) - this is where lubridate comes in
+
+This code standardizes a number to specific number of digits.
+```{r}
+# cleaning function
+cleaned_arnold_md_loans <- arnold_md_loans %>%
+  clean_names() %>%
+  rename(id = x1_id) %>%
+  mutate(amount = as.numeric(amount)) %>%
+  distinct() %>%
+  mutate(zip = str_sub(zip, start=1L, end=5L))
+
+
+# display the cleaned dataset
+cleaned_arnold_md_loans
+
+```
+
+Descriptor: eliminates duplicate rows
+
+```{r}
+# cleaning function
+cleaned_arnold_md_loans <- arnold_md_loans %>%
+  clean_names() %>%
+  rename(id = x1_id) %>%
+  mutate(amount = as.numeric(amount)) %>%
+  distinct()
+
+
+# display the cleaned dataset
+cleaned_arnold_md_loans
+
+```
+
+```{r}
+# cleaning function
+cleaned_arnold_md_loans <- arnold_md_loans %>%
+  clean_names() %>%
+  rename(id = x1_id)
+
+# display the cleaned dataset
+cleaned_arnold_md_loans
+
+
+```
