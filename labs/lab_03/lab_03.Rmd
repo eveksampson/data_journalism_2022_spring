@@ -34,14 +34,34 @@ Q1: Which five cities located in Kanawha County, West Virginia, got the largest 
 
 Note: To answer this question, you'll need to see every variation of the "city" column in Kanawha County, and then fully clean the city field for those cities. Hint: once cleaned, the dataframe that counts the number of loans by city should have 38 distinct cities for Kanawha County.
 
-1. filter project_county_name
-2. clean
-A1:
+A1: The five cities with the largest number of loans are as follows: 1)Charleston with 2,802 loans, 2)South Charleston with 478 loans, 3)Saint Albans with 296 loans, 4)Dunbar with 162 loans, and 5)Nitro with 140 loans. 
 ```{r}
-wv_ppp_loans %>%
-  filter(project_county_name == 'KANAWHA') %>%
+cleaned_wv_ppp_loans <- wv_ppp_loans %>%
+  filter(project_county_name == 'KANAWHA')
+
+cleaned_wv_ppp_loans %>% 
   group_by(city) %>%
-  summarise(total = n())
+  summarise(total = n()) 
+  
+cleaned_wv_ppp_loans %>% 
+  clean_names() %>% 
+  mutate(city = str_to_title(city)) %>%
+  mutate(city = case_when(
+    city == "Balle" ~ "Belle",
+    city == "Charelston" ~ "Charleston",
+    city == "Crosslanes" ~ "Cross Lanes",
+    city == "Elkveiw" ~ "Elkview",
+    city == "S Charleston" ~ "South Charleston",
+    city == "So Charleston" ~ "South Charleston",
+    city == "St Albans" ~ "Saint Albans",
+    city == "St. Albans" ~ "Saint Albans",
+    city == "St.albans" ~ "Saint Albans",
+    TRUE ~ city
+  )) %>% 
+  group_by(city) %>% 
+  summarise(total = n()) %>%
+  arrange(desc(total))
+
 
 
 ```
