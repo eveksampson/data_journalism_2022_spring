@@ -69,11 +69,13 @@ cleaned_wv_ppp_loans %>%
 Q2: Find the 5-digit ZIP code in West Virginia that had the highest total amount of loans (by dollar value). What is the name of the business that got the largest loan (by dollar value) in that zip code? Write up a short paragraph that also answers these questions:
 
 * Where in West Virginia is this ZIP code located?
-* How much was the business' loan for?
+* How much was the business' loan for? 
 * How much of that loan was forgiven?
 * Which number is bigger, the loan amount or the forgiveness amount? Can you explain the discrepancy?
 
-A2: 25301 had the highest amount of total loans by dollar value at 160,721,321 dollars.
+A2: 25301 had the highest amount of total loans by dollar value at 160,721,321 dollars. This zip code is located right in the middle of the state and has a median house price of $187,400. JACKSON KELLY PLLC got the largest loan in that zip code at 5,068,472 dollars. 5,126,618.6 dollars was the forgiveness amount, meaning the entire loan was forgiven. The forgiveness amount is larger because it includes the interest accrued. 
+
+
 
 
 ```{r}
@@ -88,6 +90,14 @@ clean_names() %>%
 arrange(desc(amount))
 
 
+large_loan <- wv_ppp_loans %>%
+  
+  clean_names() %>%
+  mutate(zip = str_sub(zip, start=1L, end=5L))%>%
+  
+  filter(zip == 25301) %>%
+
+  arrange(desc(amount))
 
 
 # Hint
