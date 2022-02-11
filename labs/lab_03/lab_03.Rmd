@@ -127,9 +127,23 @@ Some hints to help you answer this question:
 * When you examine the disclosure forms, there may be lots of stock sales and retirement accounts mixed in.  Ignore those. In the table in the disclosure forms, look for "Partnership" or "C-Corp" in the column named "Income Type"
 * This is a link to details on passage of the [CARES ACT](https://www.congress.gov/bill/116th-congress/house-bill/748). You can find a link to how the House voted by clicking on a link from [this page](https://www.congress.gov/bill/116th-congress/house-bill/748/actions).
 
-A3:
+A3: West Virginia Representative Carol Miller's husband, Paul Logus, owns five car dealerships. DM Motors, Dutch Miller Chevrolet, Dutch Miller of Charleston, Dutch Miller of Charlotte, and Dutch Miller Subaru. In total, they recieved 3,105,300 dollars in PPP loans. The government forgave 3,140,471, which includes the interest accrued. The government forgave 101.13% of the loans. When the CARES was introduced to the House, she voted in favor of it. 
+
 
 ```{r}
+
+Carol_Miller_spouse <- wv_ppp_loans %>%
+  
+  filter(name == "DM MOTOR, INC" | name == "DUTCH MILLER CHEVROLET, INC." | name == "DUTCH MILLER OF CHARLESTON, INC" | name == "DUTCH MILLER OF CHARLOTTE, INC" | name == "DUTCH MILLER SUBARU, INC") %>%
+
+  
+  #summarise(amount = sum(amount))
+  
+
+  summarise(amount = sum(forgiveness_amount))
+  
+  
+
 
 # Hint
 # First, create a dataframe that only has loans to those five companies
