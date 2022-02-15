@@ -99,7 +99,7 @@ maryland_zcta <- read_csv('data/maryland_zcta.csv')
 
 ### Task 9: Join ZCTA to PPP Data
 **Task** Join the ZCTA data to the our PPP & NAICS data. What's the error message you get? What do you think it means? Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** The error message is "Error in join_rows(x_key, y_key, type = type, na_equal = na_equal)" It can't join this because it can't join a character field to a number field.
 
 ```{r}
 # join on zip - but there's a problem
@@ -114,7 +114,7 @@ maryland_zcta <- maryland_zcta %>% mutate(across(ZCTA5N, as.character))
 
 ### Task 11: Join ZCTA to PPP Data and Check
 **Task** Join the ZCTA data to the our PPP & NAICS data. Examine the columns in the new dataframe - does every row have demographic data? HINT: Use the >> character to browse columns
-**Answer**
+**Answer** No, a lot of data is missing. 
 
 ```{r}
 maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_join(maryland_zcta, by=c("zip"="ZCTA5N"))
@@ -123,7 +123,7 @@ View(maryland_ppp_with_naics_and_demographics)
 
 ### Task 12: Make a Zip5 Column, Join ZCTA to PPP Data and Check Again
 **Task** Make a zip5 column and join again. Examine the new dataframe - now does every row have demographic data?
-**Answer**
+**Answer** Yes
 
 ```{r}
 # make a zip5 column and redo the join
@@ -133,7 +133,7 @@ maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_joi
 
 ### Task 13: Asking Demographic Questions
 **Task** Find the number of PPP loans that went to ZCTAs with more than 50% non-Hispanic Black population, and calculate the average and median amounts for those loans. Put your answers below.
-**Answer**
+**Answer** 41,968 loans went to ZCTAs with more than 50% non-Hispanic Black populations. The mean amount for the loans was 55,546.84	dollars and the median amount was 19,949 dollars.
 
 ```{r}
 # zcta with > 50% non-Hispanic Black population
@@ -148,7 +148,7 @@ maryland_ppp_with_naics_and_demographics %>%
 
 ### Task 14: Asking Demographic Questions
 **Task** Find the number of PPP loans that went to ZCTAs with more than 50% non-Hispanic white population, and calculate the average and median amounts for those loans. Put your answers below.
-**Answer**
+**Answer** 112,056 loans went to ZCTAs with more than 50% non-Hispanic white population. The average loan was 89,194.67 dollars and the median amount 20,833	dollars.
 
 ```{r}
 # zcta with > 50% non-Hispanic white population
@@ -163,7 +163,7 @@ maryland_ppp_with_naics_and_demographics %>%
 ### Task 15: Asking Demographic Questions
 **Task** Find the number of PPP loans that went to ZCTAs with more than 50% non-Hispanic Black population, grouped by rural or urban status, and calculate the average and median amounts for those loans. Put your answers below.
 **Answer**
-
+The number of PPP loans that went to rural ZCTAs with more than 50% non-Hispanic Black population was 145 with an average amount of 44,815.22 dollars	and a median amount of 19,064.57 dollars. The number of PPP loans that went to urban ZCTAs with more than 50% non-Hispanic Black population was 41,823 with an average amount of 55,584.05 dollars and a median amount of 19,064.57	dollars.		
 ```{r}
 # zcta with > 50% non-Hispanic Black population grouped by rural/urban
 maryland_ppp_with_naics_and_demographics %>%
@@ -178,6 +178,7 @@ maryland_ppp_with_naics_and_demographics %>%
 ### Task 16: Asking Demographic Questions
 **Task** Find the number of PPP loans that went to ZCTAs with more than 50% non-Hispanic white population, grouped by rural or urban status, and calculate the average and median amounts for those loans. Put your answers below.
 **Answer**
+The number of PPP loans that went to urban ZCTAs with more than 50% non-Hispanic white population was 18083 with an average amount of 74,463.32 dollars	and a median amount of 20,833 dollars. The number of PPP loans that went to urban ZCTAs with more than 50% non-Hispanic white population was 9,3973	 with an average amount of 92,029.39	 dollars and a median amount of 20,833	dollars.		
 
 ```{r}
 # zcta with > 50% non-Hispanic white population grouped by rural/urban
