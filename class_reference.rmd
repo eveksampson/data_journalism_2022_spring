@@ -201,3 +201,12 @@ cleaned_arnold_md_loans
 
 
 ```
+
+
+
+my_result <- original data %>%
+  filter(some_column == "some value") %>%
+  mutate()
+  group_by(some_column) %>%
+  summarise ()
+  arrange(desc())
