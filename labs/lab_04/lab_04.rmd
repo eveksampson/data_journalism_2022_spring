@@ -152,13 +152,12 @@ maryland_ppp_with_naics_and_ZCTA%>%
 question_4 <- 
 maryland_ppp_with_naics_and_ZCTA%>%
   filter(race=="Asian") %>%
-  select(amount, race, POP100, NHA, zip5) %>%
+  select(amount, race, PNHA, zip5) %>%
   group_by(zip5) %>%
   summarise(sum=sum(amount), 
-            POP100 = unique(POP100), NHA = unique(NHA),
-            count=n()) %>%
-  
-  mutate(percent_NHA = (NHA/POP100)*100) %>%
+            count=n(),
+            PNHA = unique(PNHA)) %>%
+
   arrange(desc(sum))
 
     
@@ -173,7 +172,9 @@ maryland_ppp_with_naics_and_ZCTA%>%
 **A6** [write your answer here]
 
 ```{r}
-# Write the code to produce your answer here
+question_5 <- 
+maryland_ppp_with_naics_and_ZCTA%>%
+  filter(race=="Asian", NHA==0)
 
 ```
 
