@@ -169,19 +169,38 @@ maryland_ppp_with_naics_and_ZCTA%>%
 
 
 **Q6** Check to see if any Maryland zip codes that have loans where the PPP data lists the applicant as being Asian BUT are located in a zip code that does not appear to have Asian population according to the ZCTA data. How many loans do they have and what is the total amount? Take a look at these zip codes - what could explain this?
-**A6** [write your answer here]
+**A6** There are three zip codes where an applicant is listed as Asian but there does not appear to be an Asian population. 21031 has 6 loans with a sum of 6,819,563 dollars. 21240 has 3 loans with a sum of 35,867 dollars. 20701 has 4 loans with a sum of 75,170.5 dollars. Perhaps the owners of these businesses live outside of the zip code where the business is located. They might commute to work.
+
+
 
 ```{r}
-question_5 <- 
+question_6 <- 
 maryland_ppp_with_naics_and_ZCTA%>%
-  filter(race=="Asian", NHA==0)
+  filter(race=="Asian", NHA==0) %>%
+  group_by(zip5) %>%
+    summarise(sum=sum(amount), 
+            count=n(),
+            ) %>%
+  
+  arrange(desc(sum))
+  
+  
+
+           
+
 
 ```
 
 **Q7** How many industries have exactly one loan in the data (hint: you can filter _after_ using `summarise` on any totals you create). From a newsworthiness standpoint, which of these is most worthy of further exploration, and why?
-**A7** [write your answer here]
+**A7** 44 industries have exactly one loan in the data. I think I would choose to write about the fur bearing animal and rabbit production because it seems newsworthy to me. It is interesting  that an industry repeatedly shown to be unethical and abusive gets government funding. I understand that some may disagree (and obviously I am biased) but I think it would make some people raise eyebrows as most fur-raising industries have disappeared. I would also be interested in exploring the small arms manufacturing industry loan.
 
 ```{r}
-# Write the code to produce your answer here
+question_7 <- 
+maryland_ppp_with_naics_and_ZCTA%>%
+  group_by(title) %>%
+    summarise(count=n()) %>%
+  filter(count==1)
+            
+
 
 ```
