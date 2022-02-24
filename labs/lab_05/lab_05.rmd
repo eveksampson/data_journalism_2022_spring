@@ -108,10 +108,10 @@ write_csv(wv_population_county, "data/wv_population_county.csv")
 
 Guidance: there are a lot of steps you'll need to take to answer this question. You may find it helpful to write out in English what you plan to do step-by-step before you start writing code.   
 
-**A3.** Martinsburg had the highest number of loans with 142 loans. "Full service resteraunts" had more loans than any other industry title.
+**A3.** Martinsburg had the highest number of loans with 1166 loans. "Full service resteraunts" had more loans than any other industry title with 50 loans.
 
 ```{r}
-berkeley_loans <- wv_zip_25401_loans %>%
+berkeley_loans <- wv_ppp %>%
   filter(project_county_name =="BERKELEY")
 
 write_csv(berkeley_loans, "data/berkeley_loans.csv")
@@ -153,3 +153,7 @@ arrange(desc(count))
 Hint: you will not find the answers to the last three questions in the data.  You could call them directly to get that information, but I don't want you to do that for this assignment.  Instead, do some web research. I would start by Googling the company name from the data and looking at the page that comes up for the business from at http://apps.sos.wv.gov/. I would use information I found on that page and use info about the company from Google, the [Wayback machine](https://archive.org/web/) (which lets you look at older versions of a company's website), Yelp, and Facebook.
 
 **A5.**
+SHENANDOAH VALLEY MEDICAL SYSTEM INCORPORATED got the highest loan for 3,196,645.0 dollars. The data says it retained 289 jobs. It was approved 2020-04-08. 
+
+
+
