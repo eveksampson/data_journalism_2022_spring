@@ -92,7 +92,7 @@ Google the street address.  Google the business names and search for their corpo
 
 Based on your research, does it seem suspicious that this collection of businesses all got loans using the same address? Why or why not. Use specific facts identified in your research to support your position.
 
-**A2.**
+**A2.** It does not seem suspicious that these businesses all use this address. 126 E Burke St., Martinsburg WV is known as "The Hub," which is an office space rental agency according to Googlemaps. I researched each business individually to make sure they were not some kind of business that would not be able to rent office space (like a farm). Drew Holdings LLC is a real estate management company that listed 1 employee. Brix 27 is a wine bar but whose registered address is 126 E Burke but whose physical location is elsewhere in WV. It is interesting that according to Open Corporates, DREW HOLDINGS LLC is a member BRIX27 LLC. I'm not sure exactly what that means. ABRAHAM ASHTON LLC is also a member of BRIX27 LLC. The HUB LLC (which seems to be a duplicate) is the name of the office space company. Ronin Properties, LLC is another real estate organization registered to that address. I'm not sure how all of these relate to each other, but it does not seem suspicious to me.
 
 **Q3.** Start by using the West Virginia slice of the PPP loan data that you loaded at the start of the lab to create a subset of PPP loans in West Virginia's second largest county (which you can find in wv_population_county). And then use that table you created to answer the following questions:
 
@@ -134,12 +134,26 @@ answer_2 <- clean_berkeley_loans %>%
   ) %>%
 arrange(desc(count))
 
+answer_3 <- clean_berkeley_loans %>%
+       left_join(naics_codes, by="naics_code") %>%
+  filter(cleaned_city == "Martinsburg") %>%
+  group_by(title) %>%
+    summarize(
+  count=n()
+  ) %>%
+arrange(desc(count))
+
+
+answer_5 <- clean_berkeley_loans %>%
+   left_join(naics_codes, by="naics_code") %>%
+  filter(cleaned_city == "Martinsburg", title =="Full-Service Restaurants")
+
 
 ```
 
-**Q4.** What are your two best hypotheses, which you'd need to confirm with reporting and further analysis, that explain why that industry is at the top of the list?
+**Q4.** What are your two best hypotheses, which you'd need to confirm with reporting and further analysis, that explain why that industry is at the top of the list? 
 
-**A4.**
+**A4.** My best hypotheses are as follows: 1) the full-service restaraunt industry was hit very hard by COVID because people did not want to eat out in confined spaces, and 2) people were unable to afford "luxuries" like dining out because many people also lost jobs. 
 
 **Q5.** Start with a dataframe of loans to all businesses in the city and industry that answered question 3. Answer the following questions:
 * What is the name of the business that got the highest approved loan amount?
@@ -152,8 +166,11 @@ arrange(desc(count))
 
 Hint: you will not find the answers to the last three questions in the data.  You could call them directly to get that information, but I don't want you to do that for this assignment.  Instead, do some web research. I would start by Googling the company name from the data and looking at the page that comes up for the business from at http://apps.sos.wv.gov/. I would use information I found on that page and use info about the company from Google, the [Wayback machine](https://archive.org/web/) (which lets you look at older versions of a company's website), Yelp, and Facebook.
 
-**A5.**
-SHENANDOAH VALLEY MEDICAL SYSTEM INCORPORATED got the highest loan for 3,196,645.0 dollars. The data says it retained 289 jobs. It was approved 2020-04-08. 
+**A5.** COTTLE CHRISTI L LLC had the highest approved load at 280,434.00 dollars. It was approved 2021-02-17. The data says 94 jobs were retained. There is a difference between the name on the data and the name customers may know the business by. According to the West Virginia Secretary of State website, this organization has "DBAs" - Doing Business As - names of Kitzies's Cafe, Kitzie's Cafe II, Kitzie's of Inwood, Kitzie's of Spring Mills, Kitzie's Resturaunt and Lounge and Riverbend Bar & Grill. At one point, it had 6 locations. Now, it only has 4.Two of these places are closed; Kitzie's Cafe II closed in 2018 and Kitzie's of Inwood closed May 2020, in the early months of the pandemic before it got the loan. 
+
+
+
+
 
 
 
