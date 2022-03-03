@@ -70,10 +70,11 @@ international_migration <- international_migration %>% mutate(migration_type = "
 ## Answer questions
 
 **Q1** Which region and county/city _below_ the state level accounted for the largest percentage of international migration for the entire time period? You'll need to add and populate a column representing percent of total using `mutate`.
-**A1** [write your answer here]
+**A1** The Suburban Washington Region had the largest percentage at 62.8 percent.
 
 ```{r}
-# Write the code to produce your answer here
+international_migration <- international_migration %>% mutate(percent_of_total = (total/198996)*100) %>% arrange(desc(percent_of_total))
+
 
 ```
 
