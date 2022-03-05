@@ -1,7 +1,7 @@
 ---
 title: "Reverse Engineering Project"
-author: "Student names here"
-date: "Date here"
+author: "Eve Sampson, Maddy Peek, David Andrews"
+date: "Mar 5, 2022"
 output:
   html_document:
     theme: cerulean
@@ -18,14 +18,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction 
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY URL)
+In this notebook, we are reverse engineering the story, [Nearly 250 women shot by police](Shttps://www.washingtonpost.com/graphics/2020/investigations/police-shootings-women/)
 
 ## Load libraries
 
 Loading required libraries for this analysis.
 
 ```{r echo=FALSE, message=FALSE}
-
+library(tidyverse)
+library(janitor)
+library(lubridate)
 ```
 
 ## Load and Cleaning Data
@@ -33,11 +35,8 @@ Loading required libraries for this analysis.
 In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data. 
 
 ```{r}
-# Load required data
+fatal_police_shootings <-read_csv("data/fatal-police-shootings-data.csv")
 
-# Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
-
-# Clean required data and prepare for analysis if needed. 
 
 
 ```
@@ -47,61 +46,175 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: “Since 2015, police have fatally shot nearly 250 women. Like Taylor, 89 of them were killed at homes or residences where they sometimes stayed.”
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
-# Put code to reverse engineer sentence here
+  
 
-# Display results of code below this codeblock
 
 ```
 
 ### Sentence 2
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Sentence text**: “The Post began tracking fatal police shootings in a database in January 2015, months after a White police officer in Ferguson, Mo., killed Michael Brown, an unarmed Black man during a confrontation. Since then, police have shot and killed about 1,000 people a year.”
+* **Analysis summary**: Yes. Grouping the dates by month and then again by year, there have been about 1,000 people fatally shot by police every year since 2015.
 
 ```{r}
-# Put code to reverse engineer sentence here
+fatal_police_shootings_data_year <- fatal_police_shootings %>%
+  mutate(Month = floor_date(date, "month")) %>%
+  mutate(year = case_when(
+  #2015
+    Month == "2015-01-01" ~ "2015",
+    Month == "2015-02-01" ~ "2015",
+    Month == "2015-03-01" ~ "2015",
+    Month == "2015-04-01" ~ "2015",
+    Month == "2015-05-01" ~ "2015",
+    Month == "2015-06-01" ~ "2015",
+    Month == "2015-07-01" ~ "2015",
+    Month == "2015-08-01" ~ "2015",
+    Month == "2015-09-01" ~ "2015",
+    Month == "2015-10-01" ~ "2015",
+    Month == "2015-11-01" ~ "2015",
+    Month == "2015-12-01" ~ "2015",
+    #2016
+    Month == "2016-01-01" ~ "2016",
+    Month == "2016-02-01" ~ "2016",
+    Month == "2016-03-01" ~ "2016",
+    Month == "2016-04-01" ~ "2016",
+    Month == "2016-05-01" ~ "2016",
+    Month == "2016-06-01" ~ "2016",
+    Month == "2016-07-01" ~ "2016",
+    Month == "2016-08-01" ~ "2016",
+    Month == "2016-09-01" ~ "2016",
+    Month == "2016-10-01" ~ "2016",
+    Month == "2016-11-01" ~ "2016",
+    Month == "2016-12-01" ~ "2016",
+    #2017
+    Month == "2017-01-01" ~ "2017",
+    Month == "2017-02-01" ~ "2017",
+    Month == "2017-03-01" ~ "2017",
+    Month == "2017-04-01" ~ "2017",
+    Month == "2017-05-01" ~ "2017",
+    Month == "2017-06-01" ~ "2017",
+    Month == "2017-07-01" ~ "2017",
+    Month == "2017-08-01" ~ "2017",
+    Month == "2017-09-01" ~ "2017",
+    Month == "2017-10-01" ~ "2017",
+    Month == "2017-11-01" ~ "2017",
+    Month == "2017-12-01" ~ "2017",
+    #2018
+    Month == "2018-01-01" ~ "2018",
+    Month == "2018-02-01" ~ "2018",
+    Month == "2018-03-01" ~ "2018",
+    Month == "2018-04-01" ~ "2018",
+    Month == "2018-05-01" ~ "2018",
+    Month == "2018-06-01" ~ "2018",
+    Month == "2018-07-01" ~ "2018",
+    Month == "2018-08-01" ~ "2018",
+    Month == "2018-09-01" ~ "2018",
+    Month == "2018-10-01" ~ "2018",
+    Month == "2018-11-01" ~ "2018",
+    Month == "2018-12-01" ~ "2018",
+    #2019
+    Month == "2019-01-01" ~ "2019",
+    Month == "2019-02-01" ~ "2019",
+    Month == "2019-03-01" ~ "2019",
+    Month == "2019-04-01" ~ "2019",
+    Month == "2019-05-01" ~ "2019",
+    Month == "2019-06-01" ~ "2019",
+    Month == "2019-07-01" ~ "2019",
+    Month == "2019-08-01" ~ "2019",
+    Month == "2019-09-01" ~ "2019",
+    Month == "2019-10-01" ~ "2019",
+    Month == "2019-11-01" ~ "2019",
+    Month == "2019-12-01" ~ "2019",
+    #2020
+    Month == "2020-01-01" ~ "2020",
+    Month == "2020-02-01" ~ "2020",
+    Month == "2020-03-01" ~ "2020",
+    Month == "2020-04-01" ~ "2020",
+    Month == "2020-05-01" ~ "2020",
+    Month == "2020-06-01" ~ "2020",
+    Month == "2020-07-01" ~ "2020",
+    Month == "2020-08-01" ~ "2020",
+    Month == "2020-09-01" ~ "2020",
+    Month == "2020-10-01" ~ "2020",
+    Month == "2020-11-01" ~ "2020",
+    Month == "2020-12-01" ~ "2020",
+    #2021
+    Month == "2021-01-01" ~ "2021",
+    Month == "2021-02-01" ~ "2021",
+    Month == "2021-03-01" ~ "2021",
+    Month == "2021-04-01" ~ "2021",
+    Month == "2021-05-01" ~ "2021",
+    Month == "2021-06-01" ~ "2021",
+    Month == "2021-07-01" ~ "2021",
+    Month == "2021-08-01" ~ "2021",
+    Month == "2021-09-01" ~ "2021",
+    Month == "2021-10-01" ~ "2021",
+    Month == "2021-11-01" ~ "2021",
+    Month == "2021-12-01" ~ "2021",
+    #2022
+    Month == "2022-01-01" ~ "2022",
+    Month == "2022-02-01" ~ "2022",
+    Month == "2022-03-01" ~ "2022",
+    Month == "2022-04-01" ~ "2022",
+    Month == "2022-05-01" ~ "2022",
+    Month == "2022-06-01" ~ "2022",
+    Month == "2022-07-01" ~ "2022",
+    Month == "2022-08-01" ~ "2022",
+    Month == "2022-09-01" ~ "2022",
+    Month == "2022-10-01" ~ "2022",
+    Month == "2022-11-01" ~ "2022",
+    Month == "2022-12-01" ~ "2022"
+)
+)
 
-# Display results of code below this codeblock
+fatal_police_shootings_data_year_organized <-fatal_police_shootings_data_year %>% 
+group_by(year) %>%
+ summarize(
+    count = n())
+
+```
+
+```{r}
+
+
 
 ```
 
 ### Sentence 3
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: “Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths.”
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
-# Put code to reverse engineer sentence here
 
-# Display results of code below this codeblock
+
 
 ```
 
 ### Sentence 4
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: “About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.”
+
+
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
-# Put code to reverse engineer sentence here
-
-# Display results of code below this codeblock
 
 ```
 
 ### Sentence 5
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**:“The starkest difference between women and men is the rate: Women account for about half the population, but 4 percent of the killings. Of those fatally shot every year, about 44 have been women.”
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
-# Put code to reverse engineer sentence here
 
-# Display results of code below this codeblock
 
 ```
 
