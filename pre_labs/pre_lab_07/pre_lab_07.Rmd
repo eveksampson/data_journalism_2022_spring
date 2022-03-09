@@ -284,7 +284,7 @@ Now, let's run the code we wrote in the last chapter, to get a tidy list of NAIC
 
 ### Task 2: Run code to load the table from the last chapter
 **Task** Run the following code to load table from last chapter. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** It gives us a table with 20 rows and 2 columns showing NAICS sectors and descriptions.
 ```{r}
 # Define url of page we want to scrape
 
