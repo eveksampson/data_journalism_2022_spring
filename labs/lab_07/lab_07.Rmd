@@ -58,7 +58,7 @@ district_list <- districts_url %>% read_html() %>% html_elements("p b i") %>% ht
 
 Q4. The website (https://www.justice.gov/criminal-fraud/cares-act-fraud) shows that the DOJ filed more cases in the Southern District of Florida than in any other district. One of those cases was filed against someone named "Diamond Blue Smith". Who is Smith, and what was he accused of, according to the criminal complaint? If you were an editor, would you have assigned a reporter to write a story about this case when the complaint was filed in court? Why or why not?
 
-A4.
+A4. Diamond Blue Smith is a member of the rap group Pretty Ricky. He was accused of "alleged participation in a scheme to file fraudulent loan applications seeking more than $24 million in Paycheck Protection Program (PPP) loans," according to the DOJ complaint (information from the Miami Herald https://www.miamiherald.com/miami-com/miami-com-news/article256888242.html). Apparently he recieved large loans for his two companies "Throwbackjersey.com LLC" and "Blue Star Records LLC" according to the Miami Herald. If I was an editor, I would have absolutely assigned a reporter to write about this because it involves a famous person who has already had a lot of monetary success - why does he need to break the law to get more? Famous people need to be accountable to the public, just like everyone else.  
 
 Q5. In what percentage of all judicial districts has the U.S. Department of Justice filed cases cases against people accused of fraud related to the PPP or EIDL loan program, according to the DOJ website listing those cases: https://www.justice.gov/criminal-fraud/cares-act-fraud? In answering this question, you should also produce a list of judicial districts where DOJ has NOT filed a case, according to this site.  Note: to answer this question, you will need to scrape a table of all district courts on this up-to-date Wikipedia page under the heading "Active Courts": https://en.wikipedia.org/wiki/List_of_United_States_district_and_territorial_courts  
 
@@ -76,10 +76,11 @@ leftover_list <- total_list %>% anti_join(district_list, by = c("Region" = "valu
 ```
 Q6. What might explain why, according to this site, the DOJ has filed PPP-related fraud cases in less than half of the country's judicial districts?
 
-A6.
+A6. On first glace, most of the leftover districts (where fraud cases have NOT been filed) look like less-populated or more rural areas. This would require more research, but perhaps these districts have fewer loans overall and fewer loans that immediately stick out as fraudulent. Maybe the task force is targeting very obviously fraudulently filed PPP loans in higher-density areas. A quick google search showed me one article where people in Atlanta were arrested for fraudulent loans but I did not see anything addressing district trends. 
 
 Q7. Which state had the most approved PPP loans per 100,000 population? [This web page](https://dwillis.github.io/jour472files/ppp_scraping_example/index.html) has links to 52 individual web pages, one for each state (plus Washington, D.C. and Puerto Rico). Each of those web pages contains a one-row html table that has the name of the state, the number of approved loans, and the 2019 population. Here's an example for [Alabama](https://dwillis.github.io/jour472files/ppp_scraping_example/states/alabama.html). You'll need to loop over the individual state urls, scrape each individual page and combine the information on each page into a single dataframe to answer this question. Don't forget to calculation the loans per 100,000.
-A7.
+
+A7. South Dakota had the most approved PPP loans per 100,000 at over 7 loans per 100,000 people. 
 ```{r}
 
 pop_url <- 'https://dwillis.github.io/jour472files/ppp_scraping_example/index.html'
@@ -110,6 +111,6 @@ for(row_number in 1:nrow(most_ppp)) {
 
 
 }
-
+  most_ppp_final <- most_ppp_final %>% select(state, total_ppp_loans, population) %>% mutate(loans_per_100000 = (total_ppp_loans/population)*100)
 
 ```
