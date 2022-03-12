@@ -48,10 +48,15 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 * **Sentence text**: “Since 2015, police have fatally shot nearly 250 women. Like Taylor, 89 of them were killed at homes or residences where they sometimes stayed.”
 
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: We were able to confirm the first part of the sentence; by filtering for gender and dates before publication, we got 248 fatalities. We are unable to discern if they were killed at their homes or residences where they stayed based on the data. We would need to check the locations against their home addresses to verify. 
 
 ```{r}
-  
+  women_shot_since_2015 <- fatal_police_shootings %>% mutate(year = year(date)) %>% filter(gender == "F", date < "2020-09-04")
+
+#this gives us 248 fatalities.
+  #women_shot_since_2015 <- fatal_police_shootings %>% mutate(year = year(date)) %>% filter(gender == "F") summarize(count = n()) this gives you 320 but includes data after publication
+
+
 
 
 ```
@@ -97,9 +102,34 @@ group_by(year) %>%
 
 
 
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: We came pretty close. Instead of 77 of the 247 women noted in the sentence, we got 79/248 filtering for the conditions outlined in the sentence. We did, however, get very similar percentages, successfully illustrating the point of the sentence. We think there are a few unknowns that account for these slight variations in data. 1. We don't know if additional data was entered for this timeframe after the article was published. Perhaps more cases were added/more conditions were included that became known after the published date. 2. We don't know what specific date was used as the cutoff date when this article was published. Since it was published on 9/4/20, we figured any entries that occured on 9/4/20 itself was likely not included in the statistics. Playing around with the cutoff date as early as 9/1/20 didn't produce exact results either. Still, we were able to reproduce the overarching point of the sentence, which is that mental health was a resulting factor in about 31% of women fatally shot by police since 2015, while mental health only accounted for about 22% of the men fatally shot by police since 2015.
 
 ```{r}
+
+fatal_police_shootings_before_article <- fatal_police_shootings_data_year %>%
+  filter(date < "2020-09-04")
+#this gets us all entries that happened before 2020-09-04 when the article was published.
+
+women_shot_mentalhealth <- fatal_police_shootings_before_article %>%
+filter(gender == 'F') %>% 
+#nrow() = 248 rows
+filter(signs_of_mental_illness == 'TRUE') %>% 
+  filter(manner_of_death == "shot") #%>% 
+ # nrow() = 79
+#(79/248)*100 = 31.8%
+
+#79 of the 248 of women who were fatally shot by police, or 31.8%, were reported to show signs of mental illness.
+
+men_shot_mentalhealth <- fatal_police_shootings_before_article %>%
+filter(gender == 'M') %>% 
+#nrow() = 5362
+filter(signs_of_mental_illness == 'TRUE') %>% 
+filter(manner_of_death == "shot") #%>% 
+#nrow() = 1,153
+#(1153/5362)*100 = 21.5%
+
+#21.5% of men who were fatally shot by police were reported to show signs of mental illness.
+
 
 ```
 
