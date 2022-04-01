@@ -238,6 +238,8 @@ ppp_maryland_loans_by_date %>%
   geom_line(aes(x=date_approved, y=total_loans))
 
 
+
+
 ```
 
 It's not super pretty, but there's an obvious pattern! There are a ton of loans right at the beginning of the program. There's a trickle for the next few months, and then no loans at all for several months.  
