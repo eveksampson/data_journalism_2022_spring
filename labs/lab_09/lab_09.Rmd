@@ -63,12 +63,20 @@ question_1_data %>%
   theme(
     axis.text.x = element_text(angle = 45,  hjust=1) 
   ) +
-  geom_point(aes(x=date_approved, y=total_loans))
+  geom_point(aes(x=date_approved, y=total_loans)) +
+
+  labs(
+    title="West Virginia PPP Loans in April",
+    x = "Date",
+    y = "Total Loans",
+    caption = "source: SBA PPP loan database"
+    
+  )
   
 
 #knitr::include_graphics(rep("images/chart_1.png"))
 ```
-**A1.** 
+**A1.** April 28, 2020 had the most loans.
 
 **Q2.** What are the top 10 states that got the most PPP loans per 100,000 people? You MUST do the following things when answering this question:
 
