@@ -54,15 +54,15 @@ question_1_data <- data %>%
     total_loans=n()
   )
 
+
 #ggplot
 question_1_data %>%
   ggplot() + 
   geom_line(aes(x=date_approved, y=total_loans)) + 
-  scale_x_date(date_breaks = "1 day", date_labels = "%b/%c") +
+  scale_x_date(breaks = "1 day", limits = c(as.Date("2020-04-01")+1,as.Date("2020-04-30"))) +
   theme(
-    axis.text.x = element_text(angle = 45,  hjust=1)
-  )
-
+    axis.text.x = element_text(angle = 45,  hjust=1) 
+  ) 
 
 
 #knitr::include_graphics(rep("images/chart_1.png"))
