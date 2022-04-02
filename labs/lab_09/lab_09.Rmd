@@ -64,6 +64,7 @@ question_1_data %>%
     axis.text.x = element_text(angle = 45,  hjust=1) 
   ) +
   geom_point(aes(x=date_approved, y=total_loans)) +
+  geom_text(aes(x=date_approved, y=total_loans, label=total_loans, hjust=1, vjust=1)) +
 
   labs(
     title="West Virginia PPP Loans in April",
@@ -87,8 +88,36 @@ question_1_data %>%
 * Make the bars on the chart blue! I didn't show you how to do this in the prelab, so do some web sleuthing to figure it out.  
 
 **A2.** 
-gotta join N Dakota and S dakota/North and South
+Nebraska, GA, Iowa, Illinois, Louisiana, Florida, Mississippi, Montana, Wyoming, Kansas
+```{r}
+#read in data
+data_question_2 <- read_csv("data/state_ppp_all.csv")
 
+#change to South and North Dakota
+data_question_2 %>% mutate(state= case_when(state== "N Dakota" ~ "North Dakota", state=="S Dakota" ~ "South Dakota", TRUE ~ state))
+
+#census
+all_acs <- get_acs(geography = "state", variables = c(total_pop = "B01001_001"), year = 2019)
+
+#join
+joined_question_2 <- all_acs %>% 
+  inner_join(data_question_2, by=c("NAME" = "state")) %>% 
+  mutate(loans_100k = total_ppp_loans/estimate*100000) %>% arrange(desc(loans_100k)) %>% head(10)
+
+#ggplot
+joined_question_2 %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(NAME, loans_100k), weight=loans_100k), fill="blue") +
+  coord_flip() +
+  labs(
+    title="States with highest PPP loans per 100k people",
+    x="State",
+    y="Loans per 100k people",
+    caption="source: SBA PPP loan and U.S. Census Data"
+  )
+
+
+```
 **Q3.**  A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis.  For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid. 
 
 Statisticians use scatterplots to show graphically whether one variable is correlated -- related, in a statistical sense -- with another variable.  A classic example is the [relationship between ice cream sales and temperature](https://www.mathsisfun.com/data/scatter-xy-plots.html).  The scatterplot below (press play to load the image) shows that relationship, that an increase in temperature is associated with an increase in ice cream sales. When it's 12C, sales are 200 dollars, and when it's hotter, 25C, sales are 600 dollars.
@@ -109,8 +138,18 @@ To answer those questions, make a codeblock and do the following:
 4. Make a scatterplot. I didn't show you how to do this, so look it up! 
 5. In the answer space below, describe what you see and answer the questions posed above.  In a general sense, what do you think this means?  
 
-**A3.**  
+**A3.**  According to the scatterplot, it looks like most people had at least the vast majority of their loans forgiven. As the difference between loan amount and amount forgiven increases, we see fewer data points, meaning fewer people had a small percentage of their loan forgiven. 
+```{r}
+
+ppp_wv <- read_rds("data/lab_09.rds")
+
+ppp_wv <- ppp_wv %>% 
+  filter(amount < 25000) %>% mutate(forgiveness_amount = case_when(is.na(forgiveness_amount)~ 0, TRUE ~ forgiveness_amount))
+
+ppp_wv %>% 
+  ggplot() +
+  geom_point(aes(x=amount, y=forgiveness_amount))
+
+```
 
 
-
--30-
