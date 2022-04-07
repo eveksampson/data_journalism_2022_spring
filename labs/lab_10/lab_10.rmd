@@ -110,6 +110,16 @@ joined_kabbage <- kabbage_lending %>%
   rename(total_kabbage_loans = total.x, total_loans = total.y)
 
 #Calculate the percentage of loans in each county that were Kabbage loans and save the output to the existing dataframe.
-  
-  
+joined_kabbage <- joined_kabbage %>%
+  mutate(percent_kabbage_loans =(total_kabbage_loans/total_loans)*100)
+
+#Load the `county_fips.csv` file in the data folder into a dataframe.
+county_fips <- read_csv("data/county_fips.csv")
+
+#Join the combined counties data with the fips data, again specifying the join columns and saving it to a new dataframe.
+
+kabbage_fips <- joined_kabbage %>%
+  left_join(county_fips, by=c('project_county_name'='match_county'))
+
+write_csv(kabbage_fips, "kabbage_fips.csv")
 ```
