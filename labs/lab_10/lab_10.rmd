@@ -1,7 +1,7 @@
 ---
 title: "lab_10.Rmd"
 author: "Eve Sampson"
-date: "04/11/2022"
+date: "04/08/2022"
 output: html_document
 ---
 
@@ -48,6 +48,8 @@ You MUST do the following things when answering this question:
 
 **A1.**
 https://datawrapper.dwcdn.net/t3Rhc/1/
+
+Illinios has the most total barber shop PPP loans AND the most undisbursed barber shop PPP loans, with 1713 undisbursed. 
 ```{r}
 #Use the PPP loan data, which is in the data folder and is called `barber_shops_ppp.csv`
 barbershop_ppp <- read_csv("data/barber_shops_ppp.csv")
@@ -86,6 +88,17 @@ write_csv(top_ten, "top_ten.csv")
 
 **A2.**
 
+https://datawrapper.dwcdn.net/P4397/1/
+
+I created a cholopleth map of the US broken up by state. It shows the percentage (code below) of PPP loans for barber shops in each state that remain undisbursed is color-coded accordingly. This is different from the first one because 1) it's a map, and 2) it shows percentages opposed to totals. This also shows results for all states instead of only the top ten.
+
+```{r}
+percent_joined_barbershop <- joined_barbershop %>%
+  mutate(percent_undisbursed = (total_undispersed_loans/total_barbershop_loans)*100)
+
+write_csv(percent_joined_barbershop, "question_2.csv")
+```
+
 **Q3.** The online lender Kabbage, Inc. is featured in the [ProPublica PPP fake farms story](https://www.propublica.org/article/ppp-farms). To show where Kabbage was lending money, make a county-level map that shows the percentage of loans in each county that were Kabbage loans. To do this, make a codeblock and do the following:
 
 1. Load the `kabbage_counties.csv` and `all_counties.csv` files in the data folder.
@@ -97,7 +110,8 @@ write_csv(top_ten, "top_ten.csv")
 7. Make a county-level map using that exported CSV file that displays the percentage of Kabbage loans. Style it so that the tooltip displays the county and the percentage, and format all percentages shown on the map so that they appear with one decimal point (such as 3.4%). Follow the same general guidelines as above for the chart's visual elements, and give the map a title, description and source. Provide a legend caption and format the percentage in the same way as on the tooltips.
 8. In the answer space below, provide the URL for your published map and then describe where Kabbage loans are and are not found. Where are they more common? Look specifically at Florida in the data: are there counties on the map where no data is displayed? Why?
 
-**A3.**  
+**A3.**  https://datawrapper.dwcdn.net/nclFZ/1/ 
+Kabbage loans were MUCH more common in southern Florida than seemingly anywhere else in the U.S.Kabbage loans were also relatively common in southern Alabama, New Jersey and northern Alaska - three other states that upon first glance, have seemingly little in common. None of the areas aforementioned states seem to be lucrative farming areas as they are in coastal areas or extremely northern (in the case of Alaska). The article elaborates on how potato farms were listed in unlikely areas in southern Florida. In Florida, there are no counties without data, however other states have MANY counties without data shown. There is no data displayed there either because there were no Kabbage loans listed for those counties so when the data was joined, we lost those counties. There were 2,046 counties with Kabbage loans but 3,229 counties overall. So we lost over 1,000 counties and thus there is no data shown there. 
 
 ```{r}
 #Load the `kabbage_counties.csv` and `all_counties.csv` files in the data folder.
