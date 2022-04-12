@@ -225,7 +225,7 @@ We can get a sense of where the largest hospitals are, by changing the color of 
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This changes the color of the dots by the number of beds. The darker the dot, the fewer the beds. 
 
 ```{r}
 
@@ -248,14 +248,14 @@ First, let's load the libraries we'll need. We're also going to load tidycensus 
 
 ### Task: Load libraries
 **Task** Run the following code. Describe the output in the space below. Be sure to input your census api key.
-**Answer**
+**Answer** everything works. 
 
 ```{r}
 library(tidyverse)
 library(sf)
 library(janitor)
 library(tidycensus)
-#census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
+census_api_key("c84fed421923b886b2bbdab82b6838c9a11b8c44")
 
 ```
 
@@ -264,7 +264,7 @@ And now let's load the dataframe of hospital information from the previous chapt
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This reloads the same dataframe we were working with.
 
 ```{r}
 md_hospitals <- st_read("data/Hospitals/Hospitals.shp") %>% 
@@ -281,7 +281,7 @@ Each hospital exists inside of a county, so we're going to first calculate the t
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This gives us the total beds per county.
 
 ```{r}
 
@@ -302,7 +302,7 @@ Next, we'll go out and get population data for each county from tidycensus.  The
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This gives us county population data so we can calculate per capita rates.
 
 ```{r}
 
@@ -318,7 +318,7 @@ Ultimately, we're going to join this county population table with our beds by co
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This shows that the census data can also give us shapes/geometry for maps. This gives us a dataframe with county, population and geometry.
 
 ```{r}
 
@@ -339,7 +339,7 @@ But there's a problem.  The column in our population data that has county names 
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This is the two dataframes - total beds per county and county population. The two dataframes look very different.
 
 ```{r}
 
@@ -355,7 +355,7 @@ Let's clean the population table. We're going to rename the "NAME" column to "CO
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This cleans the maryland_county_population table to rename, uppercase and remove the word "county." It also makes sure there is nothing extra - including spaces. It leaves us with three columns. 
 
 ```{r}
 md_county_population <- md_county_population %>%
@@ -374,7 +374,7 @@ Now we can join them.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This joins the two dataframes. 
 
 ```{r}
 md_beds_per_100k <- md_county_population %>%
@@ -389,7 +389,7 @@ We have two NAs after we join, for Queen Anne's County and Carolina County.  Tha
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This cleans more - if a place has no beds, it now shows "0" instead of "NA"
 
 ```{r}
 md_beds_per_100k <- md_county_population %>%
@@ -404,7 +404,7 @@ Our final step before visualization, let's calculate the number of beds per 100,
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This joings, calculates total beds and arranges it to see the most beds per 100k people. 
 
 ```{r}
 md_beds_per_100k <- md_county_population %>%
@@ -423,7 +423,7 @@ Okay, now let's visualize.  We're going to build a choropleth map, with the colo
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This gives us a chloropleth map of Maryland by county showing what areas have the highest acute care beds per capita. 
 
 ```{r}
 ggplot() + 
@@ -435,7 +435,7 @@ This map is okay, but the color scale makes it hard to draw fine-grained differe
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This changes the color from blue to purples/warmer tones. Option is "magma" instead of a minimal theme. 
 
 ```{r}
 ggplot() + 
@@ -450,7 +450,7 @@ So let's change the color scale to a "log" scale, which will help us see those d
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below. What patterns do you see?
-**Answer**
+**Answer** Southern Maryland has fewer acute care beds than other areas like Western Maryland or the Eastern shore. There are two notable exceptions, including Baltimore city. I am not sure why this is - maybe some people in the "DC suburb" are diverted to DC hospitals? 
 
 ```{r}
 ggplot() + 
