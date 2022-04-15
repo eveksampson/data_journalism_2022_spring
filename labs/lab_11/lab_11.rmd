@@ -106,10 +106,21 @@ Make a map with a point for each one of these mine permits and put a blank map w
 
 What spatial pattern do you see? How does it compare to the spatial pattern in the first map you made?
 
-**A2.**
+**A2.** The pattern is similar to the one in question 1 - it's like a diagonal line bisecting West Virginia at an angle. The dots cluster around that line, similar to how the loans wear greater above. There is a little difference, though - there seems to be a LOT more operating mines at the bottom (SW) portion of WV then there are loans. 
 
 ```{r}
+question_2 <- st_read("https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/mining_reclamation/MapServer/0/query?where=1%3D1&outFields=*&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outSR=4326&f=json") %>%
+  filter(expiredate	> "2021/09/01")
 
+counties <- counties() 
+
+wv_counties <- counties %>%
+  filter(STATEFP == "54")
+
+ggplot() + 
+  geom_sf(data=wv_counties) + 
+  geom_sf(data=question_2) +
+  theme_minimal()
 
 ```
 
