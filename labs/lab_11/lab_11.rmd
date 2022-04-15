@@ -106,7 +106,7 @@ Make a map with a point for each one of these mine permits and put a blank map w
 
 What spatial pattern do you see? How does it compare to the spatial pattern in the first map you made?
 
-**A2.** The pattern is similar to the one in question 1 - it's like a diagonal line bisecting West Virginia at an angle. The dots cluster around that line, similar to how the loans wear greater above. There is a little difference, though - there seems to be a LOT more operating mines at the bottom (SW) portion of WV then there are loans. 
+**A2.** The pattern is similar to the one in question 1 - it's like a diagonal line bisecting West Virginia at an angle. The dots cluster around that line, similar to how the loans wear greater above. There definitely seems to be some kind of relationship or correlation - lots of mines clustered around the bottom, just like the loans.. 
 
 ```{r}
 question_2 <- st_read("https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/mining_reclamation/MapServer/0/query?where=1%3D1&outFields=*&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outSR=4326&f=json") %>%
@@ -127,14 +127,37 @@ ggplot() +
 
 **Q3.** To confirm the spatial comparison you identified in question 2, let's create a new map that layers the mine location points on top of our PPP choropleth map we created in question 1. What do you notice about the number of mines in the county that has the highest total loan amount per 100K?
 
-**A3.**
+**A3.** There are hardly any mines in that county - maybe 2 on the fringe. Most of the other counties do show some kind of trend. 
+```{r}
+ggplot() + 
+  geom_sf(data=joined_wv, aes(fill=per_100k))+ 
+  geom_sf(data=question_2) +
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma",trans = "log") 
+
+
+```
+
 
 **Q4.** Starting from the original WV ppp dataframe, examine the loans to companies in "Mining, Quarrying, and Oil and Gas Extraction" in the county with the highest total loan amount per 100K (you can use the table you created in question 1 to identify the top county).
 
-* What single company accounts for the biggest chunk of the total loan amount?
+* What single company accounts for the biggest chunk of the total loan amount? Greenbriar Hotel Corporation at 
 * What specific industry are they in, based on their 6-digit NAICS code? Look them up on the web. What services do they provide?
 * How many jobs did they save, according to the data?
 * What's your hypothesis for why a company in their specific industry would need to seek a PPP loan during the pandemic?
 
 **A4.**
 
+* What single company accounts for the biggest chunk of the total loan amount? Hall Drilling, Inc. at $6,866,600.0
+* What specific industry are they in, based on their 6-digit NAICS code? Look them up on the web. What services do they provide? Their NAICS code is 213111 - Drilling, Oil, Gas and Wells. According to their website, they provide oil and well drilling. (https://www.halldrilling.com/)
+* How many jobs did they save, according to the data? The data says they retained 387 jobs.
+* What's your hypothesis for why a company in their specific industry would need to seek a PPP loan during the pandemic? 
+
+I honestly didn't think it was odd that a business in that industry would seek a PPP loan until the question was asked. My hypothesis is that some of their contracts were halted or postponed due to COVID restrictions. If they weren't considered essential workers, they may not have been allowed to work. At Hunter Army Airfield (where I worked at the start of the pandemic), some of our major construction projects were postponed indefinitely. Perhaps the same happened here? Or maybe fewer people were asking for personal well drilling? Maybe they are not considered essential? I would like to know more before making a judgement on whether or not they should have been granted a PPP loan.
+
+```{r}
+question_4 <-wv_ppp %>%
+    mutate(naics_code_21 = str_sub(naics_code, start=1L, end=2L)) %>%
+  filter(naics_code_21 == "21")
+
+```
