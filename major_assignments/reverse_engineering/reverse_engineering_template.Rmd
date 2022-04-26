@@ -136,11 +136,27 @@ filter(manner_of_death == "shot") #%>%
 ### Sentence 5
 
 * **Sentence text**:“The starkest difference between women and men is the rate: Women account for about half the population, but 4 percent of the killings. Of those fatally shot every year, about 44 have been women.”
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: According to the data prior to the article's publication, 4.4 percent of those killed by police have been women, like what the article claimed. Our analysis also showed that between 2015 and 2019, an average of 44.4 women were killed each year. Though the article does include some 2020 data, the year is not complete so it does not appear it was used to calculate this number. 
 
 ```{r}
+#women are 4 percent of the killings 
 
+#total number of killings: 5,611
+
+#total number of women killed: 248
+  women_percent <- fatal_police_shootings_before_article %>%
+  filter(gender == "F") %>%
+  summarize(
+    count = n()
+  )
+
+#248/5,611 = 4.4%
+
+#44 women killed per year - 
+  women_total <- fatal_police_shootings_before_article %>%
+    filter(gender == "F") %>%
+      group_by(year) %>%
+     summarize(
+    count = n())
 
 ```
-
--30-
