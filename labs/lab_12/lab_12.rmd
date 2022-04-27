@@ -86,7 +86,7 @@ To do that, you will need to:
 Google the top 2-3 zip codes from both Maryland and non-Maryland results and describe them in your answer.
 
 **A2.**
-
+The top 
 ```{r}
 md_vaccines <- read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") %>%
   clean_names() %>%
@@ -99,15 +99,21 @@ md_vaccines <- read_csv("https://raw.githubusercontent.com/state-of-maryland/Vac
    filter(zip_code %in% (20588:21930)) %>%
    arrange(desc(fully_vaccinated)) %>%
    slice(1:25)
-   
-write_csv(md_zips, "maryland_zips_yyyymmdd.csv")
+
+
+q2_sentence <- gsub("-", "", paste("maryland_zips_", format(today()), ".csv", sep="")) 
+
+write_csv(md_zips, q2_sentence)
+
 
  non_md_zips <- md_vaccines %>%
    filter(zip_code <20588 | zip_code >21930) %>% 
    arrange(desc(fully_vaccinated)) %>%
    slice(1:25)
  
- write_csv(non_md_zips, "non_maryland_zips_yyyymmdd.csv")
+q2_sentence2 <- gsub("-", "", paste("non_maryland_zips_", format(today()), ".csv", sep="")) 
+
+write_csv(md_zips, q2_sentence2)
 
 
 
@@ -143,7 +149,8 @@ q_3 <- md_vaccines %>%
 
 md <- get_acs(geography = "zip code tabulation area",
               variables = c(population = "B02001_001"),
-              state = "MD") %>%
+              state = "MD",
+              geometry = TRUE) %>%
               mutate(across(GEOID, as.numeric))
    
 
@@ -151,10 +158,19 @@ joined_md <- md %>% left_join(q_3, by=c('GEOID'='zip_code')) %>%
     mutate(percent_vaxxed = (fully_vaccinated/estimate)*100) %>%
     filter(percent_vaxxed < 50)
 
+
+counties = counties()
+
+md_counties <- counties %>%
+  filter(STATEFP == "24")
+
 ggplot() + 
-  geom_sf(data=joined_md, aes(percent_vaxxed)) + 
+  geom_sf(data=md_counties) +
+  geom_sf(data=joined_md, aes(fill=percent_vaxxed)) + 
   theme_minimal() +
   scale_fill_viridis_b(option="magma",trans = "log") 
   
+
+
 
 ```
