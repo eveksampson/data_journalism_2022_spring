@@ -143,10 +143,18 @@ q_3 <- md_vaccines %>%
 
 md <- get_acs(geography = "zip code tabulation area",
               variables = c(population = "B02001_001"),
-              state = "MD") 
-              #as.numeric('GEOID')
+              state = "MD") %>%
+              mutate(across(GEOID, as.numeric))
+   
 
-#joined_md <- md %>% left_join(q_3, by=c('GEOID'='zip_code'))
+joined_md <- md %>% left_join(q_3, by=c('GEOID'='zip_code')) %>%
+    mutate(percent_vaxxed = (fully_vaccinated/estimate)*100) %>%
+    filter(percent_vaxxed < 50)
+
+ggplot() + 
+  geom_sf(data=joined_md, aes(percent_vaxxed)) + 
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma",trans = "log") 
   
 
 ```
