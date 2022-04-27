@@ -86,7 +86,9 @@ To do that, you will need to:
 Google the top 2-3 zip codes from both Maryland and non-Maryland results and describe them in your answer.
 
 **A2.**
-The top 
+The top 3 zip codes from Maryland were 20906 (Aspenville, Montgomery County), 20878 (Gaithersburg, Montgomery County) and 20874 (Germantown, Montgomery County). All of the top Maryland zip codes were in Montgomery County. The top 3 non-Maryland zip codes were 20011 (DC), 20002 (DC) and 20009 (DC) - all DC zip codes. 
+
+
 ```{r}
 md_vaccines <- read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") %>%
   clean_names() %>%
@@ -141,7 +143,7 @@ You WILL need to ensure that the columns you use to join the two dataframes are 
 
 Describe the output of the map below, and say what you think the most interesting areas are.
 
-**A3.**
+**A3.** The small wedge between WV and PA seems to be the least vaccinated as well as the Delaware edge. Charles and Calvert counties also seem to have lower levels of vaccination
 
 ```{r}
 q_3 <- md_vaccines %>%
