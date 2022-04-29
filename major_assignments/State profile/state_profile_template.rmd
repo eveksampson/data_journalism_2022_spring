@@ -37,7 +37,7 @@ census_api_key("c84fed421923b886b2bbdab82b6838c9a11b8c44")
 la_ppp <- read_csv("louisiana_ppp.csv.zip") %>%
   clean_names()
 
-#how many applications: 217334
+#how many applications: 217334 minus 2 that are the wrong zip codes, so 217,332.
 
 total_apps <- la_ppp %>%
   summarise(count=n())
@@ -54,7 +54,39 @@ jefferson_hwy <- la_ppp %>%
 
 #sort by zip to see which zips have the highest average ppp loan amount and most loans
 la_ppp_zip <- la_ppp %>%
-  mutate()
+    mutate(zip5 = str_sub(zip, start=1L, end=5L)) %>%
+    group_by(zip5) %>%
+    summarize(count=n()) %>%
+    arrange(desc(count))
+# 70508 (Lafayette, LA) had the highest number of ppp loans with 3068 loans, followed by 70301 (Thibodaux, LA) and 70816 (Baton Rouge, LA) which were tied for second with 2968 loans. Looking at the counties with the LEAST amount of loans, I found at least one error. The data included "NA," and also 40503, which is a Kentucky zip code. Another error was 70016 - which is an Italian zip code. 
+
+#Next, I wanted to see if the zip codes with the most loans were also the zip codes with the highest dollar amounts
+la_ppp_amount_zip <- la_ppp %>%
+    mutate(zip5 = str_sub(zip, start=1L, end=5L)) %>%
+    group_by(zip5) %>%
+    summarise(
+    total_loans = sum(amount),
+    count=n()) %>%
+  arrange(desc(total_loans))
+#Interestingly, the zip code with the highest number of loans did not have the highest dollar amount of loans. 70508 was 3rd with $302,644,379 in total loans. The highest amount of loans was in 70130 (New Orleans) with $396,902,184. 
+
+# Examine NAICS code 
+naics_ppp <- la_ppp %>%
+  group_by(naics_code) %>%
+  summarize(count=n()) %>%
+    arrange(desc(count))
+#Naics code 812112 had the most loans with 14,578 loans. This code is for beauty salons. This code had nearly ten thousand more loans than any other. The second most common naics code was 541110 with 4,659 loans. This code is for offices of lawyers. The third most common loan was 722511, which is full-service restaraunts, that had 4631 loans. There were 58 naics codes with only 1 loan, including 111332 which is grape vinyards, 212113, which is anthracite mining, and 532220, which is formal wear and costume rental. I actually think looking at the least-common naics codes is more interesting. Naics code 921140 means "This industry comprises government establishments serving as councils and boards of commissioners or supervisors and such bodies where the chief executive (e.g., county executive or city mayor) is a member of the legislative body (e.g., county or city council) itself." This is odd, because woulnd't such people work for the government? 
+
+#Also looking at jobs retained
+
+jobs_retained <- la_ppp %>%
+  group_by(jobs_retained) %>%
+  summarize(count=n()) %>%
+    arrange(desc(count))
+
+# Most loans only retained one job, the second most loans retained two jobs, and so on until 10 and 9, which were flipped. Interestingly, there was 1 loan that retained 0 jobs but received $7,915. 
+  
+ 
 ```
 ## Geographic Analysis
 
