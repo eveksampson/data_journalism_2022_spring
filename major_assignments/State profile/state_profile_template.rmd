@@ -132,6 +132,7 @@ undisbursed_lenders <- undisbursed_loans %>%
   filter(total_undisbursed_amount > 0)
 
 write_csv(undisbursed_lenders, "undisbursed_lenders.csv")
+# As there are only 2 undisbursed loans in the whole list, this graphic isn't very exciting. 
 ```
 
 ## Industry Analysis
