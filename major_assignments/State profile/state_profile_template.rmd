@@ -102,30 +102,35 @@ Then, make a county map using ggplot showing the per-capita data and a zip code 
 
 **A2.** 
 ```{r}
-#number of loans per capita by county? Number of loans per capita by zip?
+#2 different maps, one showing per-capita values by county and the 
 
+#other with zip codes showing the _difference_ between the zip code per capita value and the statewide per capita value
+
+#statewide per capita value
+
+
+#PER CAPITA VALUES BY COUNTY
+#this gets the census data and cleans it up
 la_pop_county <- get_acs(geography = "county", 
               variables = c(population = "B01001_001"), 
               state = "LA",
               geometry = TRUE) %>%
       rename(project_county_name=NAME) %>%
       mutate(project_county_name = str_remove_all(project_county_name, "Parish|Louisiana|,")) %>%
-      mutate(project_county_name = str_replace_all(project_county_name, "Saint","St."))
+      mutate(project_county_name = str_replace_all(project_county_name, "St.","Saint"))
 
   
-# join by project county name
-
+#this is the ppp data
 loans_per_county <- la_ppp %>%
    mutate(project_county_name = str_to_title(project_county_name)) %>%
   group_by(project_county_name) %>%
   summarise(total=n())
 
+#join by project county name
 #WHY IS TOTAL EQUAL NA HELPPPPPPPP
 joined_la_county <- la_pop_county %>%
+  mutate(project_county_name = trimws(project_county_name)) %>%
     left_join(loans_per_county, by=c("project_county_name"="project_county_name"))
-
-
-
 
 
 
