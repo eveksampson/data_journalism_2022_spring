@@ -95,6 +95,7 @@ jobs_retained <- la_ppp %>%
 **A2.** 
 ```{r}
 
+
 ```
 ## Lender Analysis
 
@@ -102,7 +103,35 @@ jobs_retained <- la_ppp %>%
 
 **A3.** 
 ```{r}
+#most approved applications
+approved_loans <- la_ppp %>%
+  mutate(zip5 = str_sub(zip, start=1L, end=5L)) %>%
+  group_by(lender) %>%
+  summarize(count=n(), total_amount=sum(amount)) %>%
+  mutate(average_amount = total_amount/count) %>%
+  arrange(desc(count))
 
+         
+         # Prestamos CDFI, LLC is the lender with the most approved loans, with 21,251 and an average loan of $16,560. Capital Plus Financial, LLC had the second most with 16,110 approved loans at an average of $16,564. Neither Prestamos nor Capital Plus Financial had the highest amount of loans. Hancock Whitney Bank, which had the third most approved loans, had the highest amount of loans with $1,926,757,771 and an average loan of $149,755. They are the only lender with over $1 billion in loans. 
+
+#undisbursed loans
+undisbursed_loans <- la_ppp %>%
+  mutate(zip5 = str_sub(zip, start=1L, end=5L),
+         undisbursed = !is.na(undisbursed_amount) & undisbursed_amount > 0) %>%
+  group_by(lender) %>%
+  summarize(count=n(), total_amount=sum(amount), total_undisbursed_amount=sum(undisbursed_amount),
+            undisbursed_n = sum(undisbursed))
+
+la_ppp_totals <- la_ppp %>%
+  group_by(lender, undisbursed_amount) %>%
+  summarize(n = n())
+
+#For those lenders who had any undisbursed loans, make a graphic showing the relationship between the total amount of loans and the total undisbursed amount. Describe the most noticeable outlier lenders on that graphic below.
+
+undisbursed_lenders <- undisbursed_loans %>%
+  filter(total_undisbursed_amount > 0)
+
+write_csv(undisbursed_lenders, "undisbursed_lenders.csv")
 ```
 
 ## Industry Analysis
