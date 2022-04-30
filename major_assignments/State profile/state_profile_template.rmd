@@ -90,10 +90,46 @@ jobs_retained <- la_ppp %>%
 ```
 ## Geographic Analysis
 
-**Q2.** Write R code that examines geographic patterns for PPP loans in your state, using Census population information to calculate a per-capita figure for the state and counties and zip codes. Then, make a county map using ggplot showing the per-capita data and a zip code map showing the difference from the statewide per-capita figure. Describe the most interesting or newsworthy findings based on your exploration.
+**Q2.** Write R code that examines geographic patterns for PPP loans in your state, using Census population information to calculate a per-capita figure for the state and counties and zip codes. 
+
+Then, make a county map using ggplot showing the per-capita data and a zip code map showing the difference from the statewide per-capita figure. Describe the most interesting or newsworthy findings based on your exploration.
 
 **A2.** 
 ```{r}
+#number of loans per capita by county? Number of loans per capita by zip?
+
+la_pop_county <- get_acs(geography = "county", 
+              variables = c(population = "B01001_001"), 
+              state = "LA",
+              geometry = TRUE) %>%
+  rename(project_county_name=NAME) %>%
+      mutate(project_county_name = str_remove_all(project_county_name, "Parish|Louisiana|,")) %>%
+      mutate(project_county_name = str_replace_all(project_county_name, "Saint","St."))
+
+  
+# join by project county name
+
+loans_per_county <- la_ppp %>%
+   mutate(project_county_name = str_to_title(project_county_name)) %>%
+  group_by(project_county_name) %>%
+  summarise(total=n())
+
+#WHY IS TOTAL EQUAL NA HELPPPPPPPP
+joined_la_county <- la_pop_county %>%
+    left_join(loans_per_county, by=c("project_county_name"="project_county_name"))
+
+    #mutate(per_capital_loans = ())
+
+
+
+
+
+  mutate(total_loans = replace_na(total_loans,0)) %>%
+  mutate(per_100k = (total_loans/estimate)*100000) %>%
+  arrange(desc(total_loans))
+
+
+
 
 
 ```
@@ -132,7 +168,9 @@ undisbursed_lenders <- undisbursed_loans %>%
   filter(total_undisbursed_amount > 0)
 
 write_csv(undisbursed_lenders, "undisbursed_lenders.csv")
-# As there are only 2 undisbursed loans in the whole list, this graphic isn't very exciting. 
+# As there are only 2 undisbursed loans in the whole list, this graphic isn't very exciting.
+
+#having a very hard time with the graphics - https://app.datawrapper.de/chart/9tIgn/publish
 ```
 
 ## Industry Analysis
