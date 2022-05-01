@@ -101,6 +101,8 @@ jobs_retained <- la_ppp %>%
 Then, make a county map using ggplot showing the per-capita data and a zip code map showing the difference from the statewide per-capita figure. Describe the most interesting or newsworthy findings based on your exploration.
 
 **A2.** 
+
+In LA, counties are known as parishes. The parishes with the highest number of loans per capita were St. Helena and East Carroll parish. St. Helena is part of the Baton Rouge area. It is relatively small area. East Carroll is another small parish with less than 10,000 people. It is predominantly agriculturaland located in the MI delta area. 
 ```{r}
 #2 different maps, one showing per-capita values by county and the 
 
@@ -127,20 +129,46 @@ loans_per_county <- la_ppp %>%
   summarise(total=n())
 
 #join by project county name
-#WHY IS TOTAL EQUAL NA HELPPPPPPPP
 joined_la_county <- la_pop_county %>%
   mutate(project_county_name = trimws(project_county_name)) %>%
-    left_join(loans_per_county, by=c("project_county_name"="project_county_name"))
+    left_join(loans_per_county, by=c("project_county_name"="project_county_name")) %>%
+  mutate(loans_per_100k = (total/estimate)*100000)
+ #Saint Helena and East Carroll counties had the highest number of loans per capita
 
+ggplot() + 
+  geom_sf(data=joined_la_county, aes(fill=loans_per_100k)) + 
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma",trans = "log") 
 
+#state per capita loans
+la_pop_state <- get_acs(geography = "state", 
+              variables = c(population = "B01001_001"), 
+              state = "LA",
+              geometry = TRUE)
+#217,332 loans/4,664,362 people)*100,000 is approximately 4659 loans per 100k
 
-  #mutate(total_loans = replace_na(total_loans,0)) %>%
-  #mutate(per_100k = (total_loans/estimate)*100000) %>%
-  #arrange(desc(total_loans))
+#pop by zip
+la_pop_zip <- get_acs(geography = "zcta", 
+              variables = c(population = "B01001_001"), 
+              state = "LA",
+              geometry = TRUE)
 
+#loans by zip
+loans_per_zip <- la_ppp %>%
+  mutate(zip = str_sub(zip, start=1L, end=5L)) %>%
+    group_by(zip) %>%
+    summarise(total=n())
+  
+joined_la_zip <- la_pop_zip %>%
+    left_join(loans_per_zip, by=c("GEOID"="zip")) %>%
+    mutate(per_100k = (total/estimate)*100000) %>%
+    mutate(state_difference = (4659 - per_100k))
 
-
-
+#ABS? How to I show the negative values?
+ggplot() + 
+  geom_sf(data=joined_la_zip, aes(fill = abs(state_difference))) + 
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma",trans = "log") 
 
 ```
 ## Lender Analysis
