@@ -221,6 +221,16 @@ Create a county-level map showing the differences between the PPP applications a
 
 **A4.** 
 ```{r}
+#earlier analysis showed that most ppp loans in LA were beauty shops
+
+state_naics <- read_csv("census.txt") %>%
+ filter(fipstate == "22") %>%
+  mutate(short_naics = str_sub(naics, start=1L, end=2L)) %>%
+    group_by(short_naics) %>%
+  summarise(total=n()) %>%
+  arrange(desc(total))
+
+
 
 ```
 ## Summary
