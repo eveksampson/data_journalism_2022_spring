@@ -102,7 +102,9 @@ Then, make a county map using ggplot showing the per-capita data and a zip code 
 
 **A2.** 
 
-In LA, counties are known as parishes. The parishes with the highest number of loans per capita were St. Helena and East Carroll parish. St. Helena is part of the Baton Rouge area. It is relatively small area. East Carroll is another small parish with less than 10,000 people. It is predominantly agriculturaland located in the MI delta area. 
+In LA, counties are known as parishes. The parishes with the highest number of loans per capita were St. Helena and East Carroll parish. St. Helena is part of the Baton Rouge area. It is relatively small area. East Carroll is another small parish with less than 10,000 people. It is predominantly agricultural land located in the MI delta area.
+
+The most interesting finding is that most counties are below state average of the number of loans per 100k, meaning most loans are concentrated in urban areas like New Orleans and Baton Rouge. 
 ```{r}
 #2 different maps, one showing per-capita values by county and the 
 
@@ -161,14 +163,19 @@ loans_per_zip <- la_ppp %>%
   
 joined_la_zip <- la_pop_zip %>%
     left_join(loans_per_zip, by=c("GEOID"="zip")) %>%
+    filter(estimate > 0) %>%
     mutate(per_100k = (total/estimate)*100000) %>%
-    mutate(state_difference = (4659 - per_100k))
+    mutate(state_difference = (4659 - per_100k)) 
+
+
 
 #ABS? How to I show the negative values?
 ggplot() + 
-  geom_sf(data=joined_la_zip, aes(fill = abs(state_difference))) + 
+  geom_sf(data=joined_la_zip, aes(fill = (state_difference))) + 
   theme_minimal() +
   scale_fill_viridis_b(option="magma",trans = "log") 
+
+# The takeaway is that most of the counties have less than the state average of loans per capita, meaning most of the loans are concentrated in the urban areas - Baton Rouge, New Orleans areas.
 
 ```
 ## Lender Analysis
@@ -176,6 +183,11 @@ ggplot() +
 **Q3.** Write R code to examine which lenders had the most approved applications in your state (and include summary statistics such as total amount and average loan amount). Generate dataframes that show the number and total amount of all loans and undisbursed loans per lender. For those lenders who had any undisbursed loans, make a graphic showing the relationship between the total amount of loans and the total undisbursed amount. Describe the most noticeable outlier lenders on that graphic below.
 
 **A3.** 
+Prestamos CDFI, LLC is the lender with the most approved loans, with 21,251 and an average loan of $16,560. Capital Plus Financial, LLC had the second most with 16,110 approved loans at an average of $16,564. Neither Prestamos nor Capital Plus Financial had the highest amount of loans. Hancock Whitney Bank, which had the third most approved loans, had the highest amount of loans with $1,926,757,771 and an average loan of $149,755. They are the only lender with over $1 billion in loans. 
+
+There were only 2 undisbursed loans.
+
+Prestamos gave a LOT of lower-amount loans - more than any other lender, with over 15,000 loans between 10k and 50k.
 ```{r}
 #most approved applications
 approved_loans <- la_ppp %>%
@@ -208,7 +220,28 @@ undisbursed_lenders <- undisbursed_loans %>%
 write_csv(undisbursed_lenders, "undisbursed_lenders.csv")
 # As there are only 2 undisbursed loans in the whole list, this graphic isn't very exciting.
 
-#having a very hard time with the graphics - https://app.datawrapper.de/chart/9tIgn/publish
+#If there are no undisbursed loans, make graphic showing the relationship between lenders and loan amounts showing how many loans each lender issued for each amount in the dataframe. Describe the most noticeable outlier lenders on that graphic.
+
+lender_relationship <- la_ppp %>%
+  mutate(
+    amount_bucket = case_when(
+      amount < 10000 ~ 'under_10k',
+    amount >= 10000 & amount < 50000 ~ '10k_to_50k',
+    amount >= 50000 & amount < 100000 ~ '50k_to_100k',
+    amount >= 100000 & amount < 500000 ~ '100k_to_500k',
+    amount >= 500000 & amount < 1000000 ~ '500k_to_1m',
+    amount >= 1000000 ~ '1m_plus')) %>%
+  group_by(servicing_lender_name, amount_bucket) %>%
+  summarize(count=n())
+
+lender_relationship %>% 
+  ggplot(aes(x=amount_bucket, y=count)) +
+  geom_point() +
+  geom_text(aes(label=ifelse(amount_bucket>10000, as.character(servicing_lender_name),"")), hjust=0, vjust=0)
+  
+
+#Prestamos gave a LOT of medium-amount loans - more than any other lender.
+
 ```
 
 ## Industry Analysis
@@ -226,12 +259,17 @@ Create a county-level map showing the differences between the PPP applications a
 #too big
 state_naics <- read_csv("census.txt") %>%
  filter(fipstate == "22") %>%
-  mutate(short_naics = str_sub(naics, start=1L, end=2L)) %>%
-    group_by(short_naics) %>%
-  summarise(total=n()) %>%
-  arrange(desc(total))
+  mutate(naics_code = str_sub(naics, start=1L, end=2L)) %>%
+    group_by(naics_code) %>%
+  summarise(total_businesses=n()) 
 
+naics_ppp_short <-naics_ppp %>%
+   mutate(naics_code = str_sub(naics_code, start=1L, end=2L)) %>%
+  rename(total_ppp_loans = count)
 
+joined_naics <- naics_ppp_short %>%
+  left_join(state_naics, by=c("naics_code"))
+  
 
 ```
 ## Summary
