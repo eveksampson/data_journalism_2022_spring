@@ -253,22 +253,80 @@ Does the distribution of PPP applications by the top 10 industries (by number of
 Create a county-level map showing the differences between the PPP applications and the Census business data for one of the top 10 industry codes. You can do this either using ggplot or Datawrapper (if the latter, publish that map and include the URL below).
 
 **A4.** 
+Honestly, I'm not sure if I called the data wrong or did something else incorrect, but I got WAY more ppp loans than registered businesses - nearly across the board. I chose to look at naics code 44 for the map (which is retail/trade), and I found that trend consistent. There were WAY more ppp loans than registered businesses - over 1,000 percent more in some counties. 
 ```{r}
 #earlier analysis showed that most ppp loans in LA were beauty shops
 
-#too big
+#too big to load into github - this is the info by 
 state_naics <- read_csv("census.txt") %>%
  filter(fipstate == "22") %>%
-  mutate(naics_code = str_sub(naics, start=1L, end=2L)) %>%
-    group_by(naics_code) %>%
+    mutate(naics_code = str_sub(naics, start=1L, end=2L)) %>%
+  group_by(naics_code) %>%
   summarise(total_businesses=n()) 
 
 naics_ppp_short <-naics_ppp %>%
    mutate(naics_code = str_sub(naics_code, start=1L, end=2L)) %>%
-  rename(total_ppp_loans = count)
+  rename(total_ppp_loans = count) %>%
+  group_by(naics_code) %>%
+  summarise(total_ppp_loans=n()) 
 
 joined_naics <- naics_ppp_short %>%
   left_join(state_naics, by=c("naics_code"))
+
+#sorting registered businesses by county code and naics
+county_total_biz_by_naics <- read_csv("census.txt") %>%
+  filter(fipstate == "22") %>%
+    mutate(naics_code = str_sub(naics, start=1L, end=2L)) %>%
+  group_by(naics_code, fipscty) %>%
+  rename(county_code = fipscty) %>%
+  summarise(total_businesses=n()) 
+
+#sorting ppp by county code and naics
+count_ppp_total_by_naics <- la_ppp %>%
+  mutate(naics_code = str_sub(naics_code, start=1L, end=2L)) %>%
+  rename(match_county = project_county_name) %>%
+  group_by(naics_code, match_county) %>%
+  summarise(total_ppp=n())
+
+#read in county fips
+la_county_fips <- read_csv("county_fips_copy.csv") %>%
+  filter(state_code == "22") %>%
+  dplyr::select(match_county, county_code)
+
+#join county ppp and fips code
+joined_county_naics <- count_ppp_total_by_naics %>%
+  left_join(la_county_fips, by=c("match_county"))
+
+### total pp loans with county code
+### want to join total ppp loans with total businesses by county code
+county_ppp_total_by_naics = left_join(la_county_fips, count_ppp_total_by_naics, by = c("match_county"))
+
+nrow(county_ppp_total_by_naics)
+nrow(county_total_biz_by_naics)
+
+county_biz_ppp_naics = left_join(county_ppp_total_by_naics, county_total_biz_by_naics, by = c("county_code", "naics_code")) 
+
+naics_44_map <- county_biz_ppp_naics %>%
+  filter(naics_code == "44") %>%
+  mutate(difference_percent=(total_ppp/total_businesses)*100)
+
+la_pop_county_4 <- la_pop_county %>%
+  mutate(project_county_name = trimws(toupper(project_county_name)))
+
+naics_44 <- naics_44_map %>%
+  left_join(la_pop_county_4, by = c("match_county" = "project_county_name"))
+
+ggplot() + 
+  geom_sf(data=naics_44, aes(geometry=geometry, fill = difference_percent)) + 
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma",trans = "log") 
+
+  #not sure if these numbers are correct
+
+
+
+  
+
   
 
 ```
@@ -276,7 +334,7 @@ joined_naics <- naics_ppp_short %>%
 
 **Q5.** What is the most promising story idea that you have found during this exploration? How would you approach reporting it out and what other information/data would you need to do that? What would be the minimum story you could get from this, and what would be the maximum story?
 
-**A5.**
+**A5.** I think some of the most promising stories could come from the initial analysis done in question 3 with the lenders. I think you could take that analysis further looking at when certain loans - or amounts of loans - were approved. Were there more smaller loans at one point in the program than another? You would have to choose a date range and look at which lenders gave the most loans - and how much the loans were for - during that time frame. You could plot this for a graphical representation. The minimum story would be, after a certain event, more low-dollar or high-dollar loans were approved. The maximum story would be maybe a lender stopped approving loans after a certain time OR peice of legislation was approved. For instance, if a lender stopped approving loans after the government pushed helping smaller businesses, that would be quite scandalous. 
 ```{r}
 
 ```
